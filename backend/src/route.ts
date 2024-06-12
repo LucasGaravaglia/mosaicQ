@@ -1,8 +1,13 @@
 import { Router, Request, Response } from "express";
+import { Read, Create, Delete, Update } from "./controllers/toDoController";
 const routes = Router();
 
-routes.get("/", (req: Request, res: Response) => {
-  res.json({ message: "Teste Rota" });
-});
+routes.get("/a", Read);
+
+routes.post("/b", Create);
+
+routes.delete("/c", Delete);
+
+routes.post("/d", Update);
 
 export default routes;
