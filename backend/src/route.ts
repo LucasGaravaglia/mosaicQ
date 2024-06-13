@@ -1,13 +1,36 @@
-import { Router, Request, Response } from "express";
-import { Read, Create, Delete, Update } from "./controllers/toDoController";
+import { Router } from "express";
+import {
+  findList,
+  createList,
+  deleteList,
+  updateList,
+} from "./controllers/list.controller";
+import {
+  createGroup,
+  deleteGroup,
+  findGroup,
+  updateGroup,
+} from "./controllers/group.controller";
+
+import {
+  authUser,
+  createUser,
+  deleteUser,
+} from "./controllers/user.controller";
 const routes = Router();
 
-routes.get("/a", Read);
+routes.get("/findListById", findList);
+routes.post("/createList", createList);
+routes.delete("/deleteList", deleteList);
+routes.post("/updateList", updateList);
 
-routes.post("/b", Create);
+routes.get("/findFroupById", findGroup);
+routes.post("/createGroup", createGroup);
+routes.delete("/deleteGroup", deleteGroup);
+routes.post("/updateGroup", updateGroup);
 
-routes.delete("/c", Delete);
-
-routes.post("/d", Update);
+routes.get("/login", authUser);
+routes.post("/createUser", createUser);
+routes.delete("/deleteUser", deleteUser);
 
 export default routes;
