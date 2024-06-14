@@ -16,6 +16,25 @@ export class GroupListRepositoryPrisma implements GroupListRepository {
     return result;
   }
 
+  async update({ id, title }: GroupList): Promise<GroupList> {
+    const result = await Prisma.groupList.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+      },
+    });
+    return result;
+  }
+
+  async findAll(userId: string): Promise<GroupList[]> {
+    const result = await Prisma.groupList.findMany({
+      where: { userId: userId },
+    });
+    return result;
+  }
+
   async delete(id: string): Promise<boolean> {
     const result = await Prisma.groupList.delete({
       where: {

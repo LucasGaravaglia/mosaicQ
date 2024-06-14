@@ -18,7 +18,7 @@ interface dataJwt {
 export const generateToken = (username: string, userId: string) =>
   jwt.sign({ username, userId }, privateKey, options);
 
-export const verifyToken = (token: string | undefined): dataJwt | undefined => {
+export const verifyToken = (token: string | undefined): dataJwt => {
   if (!token) throw "Token inexistente";
   try {
     const decoded = jwt.verify(token, privateKey);

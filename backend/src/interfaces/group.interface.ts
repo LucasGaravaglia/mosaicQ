@@ -11,4 +11,6 @@ export interface GroupListCreate {
 export interface GroupListRepository {
   create(data: GroupListCreate): Promise<GroupList>;
   delete(id: string): Promise<boolean>;
+  update(data: GroupList): Promise<GroupList>;
+  findAll(userId: string): Promise<GroupList[]>;
 }

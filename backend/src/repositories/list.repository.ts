@@ -13,6 +13,26 @@ export class ListRepositoryPrisma implements ListRepository {
     });
     return result;
   }
+  async update({ id, title, description, status }: List): Promise<List> {
+    const result = await Prisma.list.update({
+      where: {
+        id,
+      },
+      data: {
+        title,
+        description,
+        status,
+      },
+    });
+    return result;
+  }
+
+  async findById(groupId: string): Promise<List[]> {
+    const result = await Prisma.list.findMany({
+      where: { groupId: groupId },
+    });
+    return result;
+  }
 
   async delete(id: string): Promise<boolean> {
     const result = await Prisma.list.delete({

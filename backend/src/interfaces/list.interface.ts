@@ -13,5 +13,7 @@ export interface ListCreate {
 
 export interface ListRepository {
   create(data: ListCreate): Promise<List>;
+  update(data: List): Promise<List>;
   delete(id: string): Promise<boolean>;
+  findById(groupId: string): Promise<List[]>;
 }

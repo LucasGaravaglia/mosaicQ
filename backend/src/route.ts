@@ -19,13 +19,13 @@ import {
 } from "./controllers/user.controller";
 const routes = Router();
 
-routes.get("/list/findById", findList);
+routes.get("/list/findBy", findList);
 routes.post("/list/create", createList);
 routes.delete("/list/delete", deleteList);
 routes.post("/list/update", updateList);
 
-routes.get("/group/findById", findGroup);
-routes.post("/groupcreate", createGroup);
+routes.get("/group/findAll", findGroup);
+routes.post("/group/create", createGroup);
 routes.delete("/group/delete", deleteGroup);
 routes.post("/group/update", updateGroup);
 
