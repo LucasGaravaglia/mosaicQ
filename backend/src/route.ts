@@ -19,18 +19,18 @@ import {
 } from "./controllers/user.controller";
 const routes = Router();
 
-routes.get("/findListById", findList);
-routes.post("/createList", createList);
-routes.delete("/deleteList", deleteList);
-routes.post("/updateList", updateList);
+routes.get("/list/findById", findList);
+routes.post("/list/create", createList);
+routes.delete("/list/delete", deleteList);
+routes.post("/list/update", updateList);
 
-routes.get("/findFroupById", findGroup);
-routes.post("/createGroup", createGroup);
-routes.delete("/deleteGroup", deleteGroup);
-routes.post("/updateGroup", updateGroup);
+routes.get("/group/findById", findGroup);
+routes.post("/groupcreate", createGroup);
+routes.delete("/group/delete", deleteGroup);
+routes.post("/group/update", updateGroup);
 
-routes.get("/login", authUser);
-routes.post("/createUser", createUser);
-routes.delete("/deleteUser", deleteUser);
+routes.get("/user/login", authUser);
+routes.post("/user/register", createUser);
+routes.delete("/user/delete", deleteUser);
 
 export default routes;

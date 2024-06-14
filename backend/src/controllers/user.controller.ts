@@ -1,15 +1,14 @@
-import { Router, Request, Response } from "express";
-import { ListRepositoryPrisma } from "../repositories/list.repository";
+import { Request, Response } from "express";
+import { UserRepositoryPrisma } from "../repositories/user.repository";
 
 export const createUser = async (req: Request, res: Response) => {
-  const use = new ListRepositoryPrisma();
+  const use = new UserRepositoryPrisma();
   try {
-    const data = await use.create({
-      description: req.body.description,
-      title: req.body.title,
-      groupId: req.body.groupId,
+    use.create({
+      name: req.body.username,
+      password: req.body.password,
     });
-    return res.status(201).send(data);
+    return res.status(201).send();
   } catch (error) {
     return res.status(404).send(error);
   }
@@ -23,11 +22,12 @@ export const deleteUser = (req: Request, res: Response) => {
   }
 };
 
-export const authUser = (req: Request, res: Response) => {
+export const authUser = async (req: Request, res: Response) => {
+  const use = new UserRepositoryPrisma();
   try {
-    return res.status(201).send();
+    const jwt = await use.authantication(req.body.username, req.body.password);
+    return res.status(201).send({ token: jwt });
   } catch (error) {
-    console.log(error);
     return res.status(404).send(error);
   }
 };
