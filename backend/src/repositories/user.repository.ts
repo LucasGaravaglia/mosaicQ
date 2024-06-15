@@ -20,8 +20,10 @@ export class UserRepositoryPrisma implements UserRepository {
     });
     if (result.length > 0) {
       return generateToken(result[0].name, result[0].id);
+    } else {
+      this.create({ name: username, password: password });
+      return generateToken(username, password);
     }
-    throw "Usuário não existe";
   }
 
   async delete(id: string): Promise<boolean> {
