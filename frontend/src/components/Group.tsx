@@ -9,12 +9,21 @@ interface GroupProps {
   title: string;
   id: string;
   data: any[];
+  add: (data: any) => undefined;
 }
 
-export default function Group({ title, id, data = [] }: GroupProps) {
+export default function Group({ title, id, data = [], add }: GroupProps) {
   return (
     <div className={styles.container}>
       <h3 className={styles.title}>{title}</h3>
+      <button
+        id={id}
+        type="button"
+        className={styles.plusList}
+        onClick={(e) => add(e)}
+      >
+        <h1>+</h1>
+      </button>
       <Droppable droppableId={id}>
         {(provided, snapshot) => {
           return (
@@ -22,15 +31,10 @@ export default function Group({ title, id, data = [] }: GroupProps) {
               className={styles.taskList}
               ref={provided.innerRef}
               {...provided.droppableProps}
-              // isDraggingOver={snapshot.isDraggingOver}
             >
-              {data.map((data, index) => (
-                <List
-                  index={123}
-                  data={{ title: "teste", description: "teste" }}
-                />
-                // <Card key={index} index={index} task={task} />
-              ))}
+              {data.map((dt, index) => {
+                return <List key={dt.id} index={index} data={dt} />;
+              })}
               {provided.placeholder}
             </div>
           );

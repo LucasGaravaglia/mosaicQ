@@ -1,6 +1,6 @@
 .container {
   background-color: #f4f5f7;
-  border-radius: 2.5px;
+  border-radius: 1rem;
   width: 400px;
   height: 900px;
   overflow-y: scroll;
@@ -15,12 +15,15 @@
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
+  background-color: gray;
 }
 
 .title {
   padding: 8px;
-  background-color: pink;
+  background-color: rgb(0, 26, 255);
   text-align: center;
+  cursor: default;
+  pointer-events: none;
 }
 
 .taskList {
@@ -30,15 +33,30 @@
   flex-grow: 1;
   min-height: 100px;
 }
+.plusList {
+  width: 100%;
+  background-color: azure;
+  cursor: pointer;
+}
+.plusList h1 {
+  color: #000;
+}
 
 .boardContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  background-color: antiquewhite;
+  background-color: gray;
   width: "1300px";
   margin: "0 auto";
+}
+
+.completed {
+  background-color: rgb(0, 255, 0);
+}
+.inprogress {
+  background-color: yellow;
 }
 
 .listContainer {
@@ -50,7 +68,6 @@
   min-height: 120px;
   margin-left: 10px;
   margin-right: 10px;
-  /* background-color: ${(props) => bgcolorChange(props)}; */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
