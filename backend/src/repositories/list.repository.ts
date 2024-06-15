@@ -7,7 +7,7 @@ export class ListRepositoryPrisma implements ListRepository {
       data: {
         description: data.description,
         title: data.title,
-        groupId: data.groupId,
+        userId: data.userId,
         status: "pending",
       },
     });
@@ -27,9 +27,9 @@ export class ListRepositoryPrisma implements ListRepository {
     return result;
   }
 
-  async findById(groupId: string): Promise<List[]> {
+  async findById(userId: string): Promise<List[]> {
     const result = await Prisma.list.findMany({
-      where: { groupId: groupId },
+      where: { userId: userId },
     });
     return result;
   }

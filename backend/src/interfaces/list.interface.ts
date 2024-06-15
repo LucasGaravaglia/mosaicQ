@@ -8,7 +8,7 @@ export interface List {
 export interface ListCreate {
   title: string;
   description: string;
-  groupId: string;
+  userId: string;
 }
 
 export interface ListRepository {

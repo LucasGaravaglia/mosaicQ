@@ -1,13 +1,17 @@
 import { Router, Request, Response } from "express";
 import { ListRepositoryPrisma } from "../repositories/list.repository";
+import { verifyToken } from "../utils";
 
 export const createList = async (req: Request, res: Response) => {
   const use = new ListRepositoryPrisma();
   try {
+    const { userId } = verifyToken(
+      req.headers.authorization?.split("Basic ")[1]
+    );
     const data = await use.create({
       description: req.body.description,
       title: req.body.title,
-      groupId: req.body.groupId,
+      userId: userId,
     });
     return res.status(201).send({ listId: data.id });
   } catch (error) {
@@ -17,8 +21,9 @@ export const createList = async (req: Request, res: Response) => {
 
 export const findList = async (req: Request, res: Response) => {
   const use = new ListRepositoryPrisma();
+  const { userId } = verifyToken(req.headers.authorization?.split("Basic ")[1]);
   try {
-    const data = await use.findById(req.body.groupId);
+    const data = await use.findById(userId);
     return res.status(201).send(data);
   } catch (error) {
     return res.status(404).send(error);
