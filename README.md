@@ -15,7 +15,7 @@ docker-compose up
 Para ligar o Backend, no diretório do Backend com o docker up:
 
 ```bash
-yarn start
+yarn dev
 ```
 
 Para ligar o Frontend, no diretório do frontend:
