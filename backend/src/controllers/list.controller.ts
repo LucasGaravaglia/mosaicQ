@@ -11,6 +11,7 @@ export const createList = async (req: Request, res: Response) => {
     const data = await use.create({
       description: req.body.description,
       title: req.body.title,
+      status: req.body.status,
       userId: userId,
     });
     return res.status(201).send({ listId: data.id });
@@ -41,7 +42,7 @@ export const updateList = async (req: Request, res: Response) => {
     });
     return res.status(201).send(data);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(404).send(error);
   }
 };
@@ -49,10 +50,10 @@ export const updateList = async (req: Request, res: Response) => {
 export const deleteList = async (req: Request, res: Response) => {
   const use = new ListRepositoryPrisma();
   try {
-    const data = await use.delete(req.body.id);
+    const data = await use.delete(req.params.id);
     return res.status(201).send(data);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(404).send(error);
   }
 };

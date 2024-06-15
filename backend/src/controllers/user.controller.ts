@@ -17,7 +17,7 @@ export const deleteUser = (req: Request, res: Response) => {
   try {
     return res.status(201).send();
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return res.status(404).send(error);
   }
 };

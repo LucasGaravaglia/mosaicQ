@@ -9,6 +9,7 @@ export interface ListCreate {
   title: string;
   description: string;
   userId: string;
+  status: string;
 }
 
 export interface ListRepository {

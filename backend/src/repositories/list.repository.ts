@@ -8,7 +8,7 @@ export class ListRepositoryPrisma implements ListRepository {
         description: data.description,
         title: data.title,
         userId: data.userId,
-        status: "pending",
+        status: data.status,
       },
     });
     return result;

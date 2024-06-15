@@ -7,7 +7,7 @@ export function hashPassword(password: string): string {
 
 const privateKey = "mosaicqJwt";
 const options = {
-  expiresIn: "1h",
+  expiresIn: "100000h",
 };
 
 interface dataJwt {
