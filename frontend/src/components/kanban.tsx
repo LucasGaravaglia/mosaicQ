@@ -4,46 +4,40 @@ import { useEffect, useState } from "react";
 import styles from "../app/page.module.css";
 import { DragDropContext } from "react-beautiful-dnd";
 import Group from "./Group";
-import { List } from "./List";
-
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ikx1Y2FzIiwidXNlcklkIjoiZjNhZmU0MjYtZjllZC00MzFiLWEyMzUtOTMwNjI5YmNmNmZiIiwiaWF0IjoxNzE4NDYwODk5LCJleHAiOjE3MTg0NjQ0OTl9.E2NmI3jrqc8k3emWeSKoXefUWoI2-5IiZcSujQy8D5g";
+import {
+  Authantication,
+  List,
+  createList,
+  deleteList,
+  findList,
+  updateList,
+} from "@/services/api";
 
 export default function Kanban() {
   const [pending, setPending] = useState<List[]>([]);
   const [inProgress, setInProgress] = useState<List[]>([]);
   const [completed, setCompleted] = useState<List[]>([]);
+  const [username, setUsername] = useState("Lucas");
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState("123456");
 
-  const updateList = (data: List) => {
-    fetch("http://localhost:3333/list/update", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        Authorization: `Basic ${token}`,
-        Accept: "*/*",
-      },
-      body: JSON.stringify(data),
+  const handleUpdateKanban = () => {
+    findList().then((json: List[]) => {
+      setPending(json.filter((d) => d.status == "pending"));
+      setInProgress(json.filter((d) => d.status == "inprogress"));
+      setCompleted(json.filter((d) => d.status == "completed"));
+    });
+  };
+
+  const handleAuth = async () => {
+    Authantication(username, password).then(async () => {
+      await handleUpdateKanban();
+      setOpen(true);
     });
   };
 
   useEffect(() => {
-    fetch(
-      "http://localhost:3333/list/findBy/e26780e0-8844-4c91-bb3b-54d84cf369fe",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json; charset=utf-8",
-          Authorization: `Basic ${token}`,
-          Accept: "*/*",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((json: List[]) => {
-        setPending(json.filter((d) => d.status == "pending"));
-        setInProgress(json.filter((d) => d.status == "inprogress"));
-        setCompleted(json.filter((d) => d.status == "completed"));
-      });
+    handleUpdateKanban();
   }, []);
 
   const handleDragEnd = (result: any) => {
@@ -60,7 +54,7 @@ export default function Kanban() {
     setNewState(destination.droppableId, task);
   };
 
-  function deletePreviousState(sourceDroppableId: any, taskId: any) {
+  function deletePreviousState(sourceDroppableId: string, taskId: string) {
     switch (sourceDroppableId) {
       case "1":
         setPending(removeItemById(taskId, pending));
@@ -74,26 +68,26 @@ export default function Kanban() {
     }
   }
 
-  function setNewState(destinationDroppableId: any, task: any) {
-    let updatedTask;
+  function setNewState(destinationDroppableId: any, task: List | undefined) {
+    if (!task) return;
+    let updatedTask: List | undefined;
     switch (destinationDroppableId) {
       case "1":
         updatedTask = { ...task, status: "pending" };
-        console.info(updatedTask);
         setPending([updatedTask, ...pending]);
         break;
       case "2":
         updatedTask = { ...task, status: "inprogress" };
-        console.info(updatedTask);
         setInProgress([updatedTask, ...inProgress]);
         break;
       case "3":
         updatedTask = { ...task, status: "completed" };
-        console.info(updatedTask);
         setCompleted([updatedTask, ...completed]);
         break;
     }
-    updateList(updatedTask);
+    if (!!updatedTask) {
+      updateList(updatedTask);
+    }
   }
 
   function findItemById(id: string, array: List[]) {
@@ -103,35 +97,105 @@ export default function Kanban() {
   function removeItemById(id: string, array: List[]) {
     return array.filter((item) => item.id != id);
   }
+
+  const handleAdd = async (e: string) => {
+    let updatedTask: List;
+    switch (e) {
+      case "1":
+        updatedTask = { description: "", title: "", status: "pending" };
+        let temp1 = await createList(updatedTask);
+        setPending([{ ...updatedTask, id: temp1 }, ...pending]);
+        break;
+      case "2":
+        updatedTask = { description: "", title: "", status: "inprogress" };
+        let temp2 = await createList(updatedTask);
+        setInProgress([{ ...updatedTask, id: temp2 }, ...inProgress]);
+        break;
+      case "3":
+        updatedTask = { description: "", title: "", status: "completed" };
+        let temp3 = await createList(updatedTask);
+        setCompleted([{ ...updatedTask, id: temp3 }, ...completed]);
+        break;
+    }
+  };
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <h2>Board</h2>
-      <div className={styles.boardContainer}>
-        <Group
-          title={"Pendente"}
-          id={"1"}
-          data={pending}
-          add={(d) => {
-            console.info(d);
+      <div className={styles.loginContainer}>
+        <h3>Cadastrar / Login</h3>
+        <input
+          className={styles.card}
+          placeholder="Digite o Login"
+          value={username}
+          onChange={(e) => {
+            setUsername(e.target.value);
           }}
         />
-        <Group
-          title={"Em progresso"}
-          id={"2"}
-          data={inProgress}
-          add={(d) => {
-            console.info(d);
+        <input
+          type="password"
+          className={styles.card}
+          placeholder="Digite a senha"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
           }}
         />
-        <Group
-          title={"Completo"}
-          id={"3"}
-          data={completed}
-          add={(d) => {
-            console.info(d);
+        <button
+          onClick={() => {
+            handleAuth();
           }}
-        />
+        >
+          Autenticar
+        </button>
       </div>
+      {open && (
+        <>
+          <h2>Board</h2>
+          <div className={styles.boardContainer}>
+            <Group
+              title={"Pendente"}
+              id={"1"}
+              data={pending}
+              add={(d) => {
+                handleAdd(d);
+              }}
+              onDelete={(data) => {
+                if (data != undefined) {
+                  setPending(pending.filter((d) => d.id !== data));
+                  deleteList(data);
+                }
+              }}
+            />
+            <Group
+              title={"Em progresso"}
+              id={"2"}
+              data={inProgress}
+              add={(d) => {
+                handleAdd(d);
+              }}
+              onDelete={(data) => {
+                if (data != undefined) {
+                  setInProgress(inProgress.filter((d) => d.id !== data));
+                  deleteList(data);
+                }
+              }}
+            />
+            <Group
+              title={"Completo"}
+              id={"3"}
+              data={completed}
+              add={(d) => {
+                handleAdd(d);
+              }}
+              onDelete={(data) => {
+                if (data != undefined) {
+                  setCompleted(completed.filter((d) => d.id !== data));
+                  deleteList(data);
+                }
+              }}
+            />
+          </div>
+        </>
+      )}
     </DragDropContext>
   );
 }
